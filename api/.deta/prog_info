@@ -1,0 +1,1 @@
+{"id":"aa177483-cff8-4e36-8086-2cdc615bffef","space":9279,"runtime":"python3.7","name":"api","path":"vgiags","project":"c0d650br","account":"144798365827","region":"ap-southeast-1","deps":["fastapi"],"envs":null,"public":true,"log_level":"debug","cron":""}

@@ -31,16 +31,16 @@ class UpdatedBusDetails(BaseModel):
     distress_count: int = None
 
 @app.get("/")
-def read_root():
+async def read_root():
     return {"greetings": "Welcome to the Bus Tracking API!"}
 
 
 @app.get("/busdetails")
-def get_bus_details():
+async def get_bus_details():
     return next(db.fetch())
 
 @app.get("/busdetails/{vehicle_id}")
-def get_bus_detail_by_no(vehicle_id: int):
+async def get_bus_detail_by_no(vehicle_id: int):
     item = next(db.fetch({"vehicle_id":vehicle_id}))
     #we can use try method also to handle errors eg:
     # try:
@@ -53,7 +53,7 @@ def get_bus_detail_by_no(vehicle_id: int):
         raise HTTPException(status_code=404, detail="Vehicle ID not found")
 
 @app.post("/busdetails/")
-def add_bus_details(bus_details: BusDetails):
+async def add_bus_details(bus_details: BusDetails):
     current_object_vehicle_id = bus_details.dict()["vehicle_id"]
     item = next(db.fetch({"vehicle_id":current_object_vehicle_id}))
     if item:
@@ -63,7 +63,7 @@ def add_bus_details(bus_details: BusDetails):
         return next(db.fetch())[-1]
 
 @app.delete("/busdetails/{vehicle_id}")
-def delete_bus_details(vehicle_id: int):
+async def delete_bus_details(vehicle_id: int):
     item = next(db.fetch({"vehicle_id":vehicle_id}))
     if item:
         db.delete(item[0]["key"])
@@ -72,7 +72,7 @@ def delete_bus_details(vehicle_id: int):
         raise HTTPException(status_code=404, detail="Vehicle ID not found")
 
 @app.put("/busdetails/{vehicle_id}")
-def update_bus_details(vehicle_id: int, updated_bus_details: UpdatedBusDetails):
+async def update_bus_details(vehicle_id: int, updated_bus_details: UpdatedBusDetails):
     item = next(db.fetch({"vehicle_id":vehicle_id}))
     item_key = item[0]["key"]
     updated_dictionary_of_bus_details = {k:v for k,v in updated_bus_details.dict().items() if (v is not None)}

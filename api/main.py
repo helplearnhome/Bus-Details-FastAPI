@@ -1,12 +1,10 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional
 from deta import Deta
 from datetime import date
 from typing import Optional
 import re
-#key - "c0d650br_vmCwwEVhJZpUvTmvWimS48YEAYcoDcA8"
 
 
 deta = Deta()
@@ -90,7 +88,7 @@ async def delete_bus_details(vehicle_id: int,date_field: str=None):
     else:
         raise HTTPException(status_code=404, detail="Vehicle ID/Date Field not found")
 
-@app.put("/busdetails/vehicle_id/{vehicle_id}")
+@app.put("/busdetails/vehicle_id/{vehicle_id}/{date_field}")
 async def update_bus_details(vehicle_id: int, updated_bus_details: UpdatedBusDetails, date_field: Optional[str]=None):
     json_item = next(db.fetch({"vehicle_id":vehicle_id, "date_field":date_field}))
     if json_item == []:
